@@ -17,9 +17,6 @@ let addressesapi = [
 
 // 设置优选地址，不带端口号默认80，noTLS订阅生成
 let addressesnotls = [
-	'www.visa.com.sg#官方优选域名',
-	'www.wto.org:8080#官方优选域名',
-	'www.who.int:8880#官方优选域名',
 ];
 
 // 设置优选noTLS地址api接口
@@ -61,8 +58,8 @@ let total = 99;//PB
 let timestamp = 4102329600000;//2099-12-31
 const regex = /^(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}|\[.*\]):?(\d+)?#?(.*)?$/;
 // 虚假uuid和hostname，用于发送给配置生成服务
-let fakeUserID ;
-let fakeHostName ;
+let FAKEUserID ;
+let FAKEHostName ;
 let httpsPorts = ["2053","2083","2087","2096","8443"];
 let effectiveTime = 7;//有效时间 单位:天
 let updateTime = 3;//更新时间
@@ -290,10 +287,10 @@ export default {
 		
 
 		const currentDate = new Date();
-		const fakeUserIDMD5 = await MD5MD5(Math.ceil(currentDate.getTime()));
-		fakeUserID = fakeUserIDMD5.slice(0, 8) + "-" + fakeUserIDMD5.slice(8, 12) + "-" + fakeUserIDMD5.slice(12, 16) + "-" + fakeUserIDMD5.slice(16, 20) + "-" + fakeUserIDMD5.slice(20);
-		fakeHostName = fakeUserIDMD5.slice(6, 9) + "." + fakeUserIDMD5.slice(13, 19) + ".xyz";
-		//console.log(`${fakeUserID}\n${fakeHostName}`); // 打印fakeID
+		const FAKEUserIDMD5 = await MD5MD5(Math.ceil(currentDate.getTime()));
+		FAKEUserID = FAKEUserIDMD5.slice(0, 8) + "-" + FAKEUserIDMD5.slice(8, 12) + "-" + FAKEUserIDMD5.slice(12, 16) + "-" + FAKEUserIDMD5.slice(16, 20) + "-" + FAKEUserIDMD5.slice(20);
+		FAKEHostName = FAKEUserIDMD5.slice(6, 9) + "." + FAKEUserIDMD5.slice(13, 19) + ".xyz";
+		//console.log(`${FAKEUserID}\n${FAKEHostName}`); // 打印FAKEID
 
 		total = total * 1099511627776 * 1024;
 		let expire= Math.floor(timestamp / 1000) ;
@@ -420,7 +417,7 @@ export default {
 		}
 		if (host.toLowerCase().includes('notls') || host.toLowerCase().includes('worker') || host.toLowerCase().includes('trycloudflare')) noTLS = 'true';
 		noTLS = env.NOTLS || noTLS;
-		let subconverterUrl = generateFakeInfo(url.href, uuid, host);
+		let subconverterUrl = generateFAKEInfo(url.href, uuid, host);
 
 		if (!userAgent.includes('subconverter') && MamaJustKilledAMan.some(PutAGunAgainstHisHeadPulledMyTriggerNowHesDead => userAgent.includes(PutAGunAgainstHisHeadPulledMyTriggerNowHesDead)) && MamaJustKilledAMan.length > 0) {
 			const envKey = env.URL302 ? 'URL302' : (env.URL ? 'URL' : null);
@@ -674,7 +671,7 @@ export default {
 			
 			if (协议类型 == 'Trojan' && (userAgent.includes('surge') || (format === 'surge' && !userAgent.includes('subconverter')) ) && !userAgent.includes('cf-workers-sub')) {
 				const TrojanLinks = combinedContent.split('\n');
-				const TrojanLinksJ8 = generateFakeInfo(TrojanLinks.join('|'), uuid, host);
+				const TrojanLinksJ8 = generateFAKEInfo(TrojanLinks.join('|'), uuid, host);
 				subconverterUrl =  `https://${subconverter}/sub?target=surge&ver=4&url=${encodeURIComponent(TrojanLinksJ8)}&insert=false&config=${encodeURIComponent(subconfig)}&emoji=true&list=false&xudp=false&udp=false&tfo=false&expand=true&scv=true&fdn=false`;
 			} else {
 
@@ -728,7 +725,7 @@ export default {
 				if (协议类型 == 'Trojan' && (userAgent.includes('surge') || (format === 'surge' && !userAgent.includes('subconverter')) ) && !userAgent.includes('cf-workers-sub')){
 					subconverterContent = surge(subconverterContent, host);
 				}
-				subconverterContent = revertFakeInfo(subconverterContent, uuid, host);
+				subconverterContent = revertFAKEInfo(subconverterContent, uuid, host);
 				return new Response(subconverterContent, {
 					headers: { 
 						"Content-Disposition": `attachment; filename*=utf-8''${encodeURIComponent(FileName)}; filename=${FileName}`,
@@ -765,8 +762,8 @@ async function MD5MD5(text) {
 }
 
 
-function generateFakeInfo(content, userID, hostName) {
-	content = content.replace(new RegExp(userID, 'g'), fakeUserID).replace(new RegExp(hostName, 'g'), fakeHostName);
+function generateFAKEInfo(content, userID, hostName) {
+	content = content.replace(new RegExp(userID, 'g'), FAKEUserID).replace(new RegExp(hostName, 'g'), FAKEHostName);
 	return content;
 }
 function generateDynamicUUID(key) {
@@ -833,8 +830,8 @@ function isValidIPv4(address) {
 }
 
 
-function revertFakeInfo(content, userID, hostName) {
-	content = content.replace(new RegExp(fakeUserID, 'g'), userID).replace(new RegExp(fakeHostName, 'g'), hostName);
+function revertFAKEInfo(content, userID, hostName) {
+	content = content.replace(new RegExp(FAKEUserID, 'g'), userID).replace(new RegExp(FAKEHostName, 'g'), hostName);
 	return content;
 }
 
